@@ -105,7 +105,7 @@ TEMPLATE = """
     <div id="main-container" class="container">
       <div class="overlay t">
         <h1>
-          <a href="https://ascribe.io/art/piece/{{bitcoin_hash}}" target="_blank">
+          <a href="https://www.ascribe.io/art/piece/{{bitcoin_hash}}" target="_blank">
             {{title}} &ndash; {{artist}}
           </a>
         </h1>
