@@ -21,7 +21,6 @@ TEMPLATE = """
     <meta charset="utf-8">
     <title>{{title}} by {{artist}}</title>
     <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
-    <link href="https://rawgit.com/cabin/videojs-sublime-skin/master/dist/videojs-sublime-skin.css" rel="stylesheet">
     <script src="//vjs.zencdn.net/4.12/video.js"></script>
     <style>
     body { font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif }
