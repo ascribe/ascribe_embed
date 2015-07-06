@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="/static/audiojs/audio.min.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+    .container {
+        background-color: #efefef;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .title {
+        font-size: 14px;
+        margin: 0;
+        padding: 4px 12px;
+    }
+
+    .title a {
+        text-decoration: none;
+        font-weight: normal;
+    }
+
+    .title a:hover {
+        text-decoration: underline;
+    }
+
+    .title a,
+    .audiojs .play-pause,
+    .audiojs .time em,
+    .audiojs .time {
+        color: #4c4c4c;
+        text-shadow: 1px 1px 1px rgba(0,0,0,.1);
+    }
+
+    .audiojs * {
+        box-sizing: content-box;
+    }
+
+    .audiojs {
+        background-image: none;
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        width: 100%;
+        position: relative;
+        padding-bottom: 2px;
+    }
+
+    .audiojs .play-pause,
+    .audiojs .scrubber,
+    .audiojs .time {
+        position: absolute;
+        border: none;
+    }
+
+    .audiojs .play-pause {
+        left: 0;
+        opacity: 0.6;
+    }
+
+    .audiojs .time {
+        right: 0; 
+        width: 105px;
+    }
+
+    .audiojs .scrubber {
+        left: 38px;
+        right: 123px;
+        width: auto;
+        background-color: white;
+    }
+
+    .audiojs .loaded {
+        background-color: #ddd;
+        background-image: none;
+    }
+
+    .audiojs .progress {
+        background-color: #02b6a3;
+        background-image: none;
+    }
+
+    .video-js {
+        background-color: transparent;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div id="main-container" class="container">
+    <h1 class="title">
+      <a href="https://www.ascribe.io/art/piece/{{bitcoin_hash}}" target="_blank">
+        {{title}} &ndash; {{artist}}
+      </a>
+    </h1>
+    <audio class="ascribe-audio" src={{url}} preload="none" />
+</div>
+
+<script>
+audiojs.events.ready(function() {
+    var as = audiojs.createAll();
+});
+</script>
+{% endblock %}
