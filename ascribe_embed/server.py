@@ -41,6 +41,7 @@ def render(bitcoin_hash):
 
 
 @app.route('/edition/<bitcoin_hash>')
+@app.route('/content/<bitcoin_hash>')
 def embed(bitcoin_hash):
     if not BITCOIN_HASH_RE.match(bitcoin_hash):
         abort(404)
