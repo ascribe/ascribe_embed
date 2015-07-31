@@ -7,17 +7,26 @@ from flask import Flask, abort, render_template
 
 app = Flask(__name__)
 
-ENDPOINT = 'http://www.ascribe.io/api/editions/{}/'
+EDITIONS_ENDPOINT = 'http://www.ascribe.io/api/editions/{}/'
+PIECES_ENDPOINT = 'http://www.ascribe.io/api/pieces/{}/'
 BITCOIN_HASH_RE = re.compile('^[a-zA-Z0-9]+$')
 
 
 @lru_cache_function(max_size=1024, expiration=60 * 60)
 def render(bitcoin_hash):
-    details = requests.get(ENDPOINT.format(bitcoin_hash)).json()
-    edition = details['edition']
+    endpoint = 'editions'
+    details = requests.get(EDITIONS_ENDPOINT.format(bitcoin_hash)).json()
+    if not details['success']:
+        endpoint = 'pieces'
+        details = requests.get(PIECES_ENDPOINT.format(bitcoin_hash)).json()
+        if not details['success']:
+            return
+
+    edition = details.get('edition', details.get('piece'))
     mimetype = edition['digital_work']['mime']
 
     context = {
+        'endpoint': endpoint,
         'bitcoin_hash': bitcoin_hash,
         'title': edition['title'],
         'artist': edition['artist_name'],
@@ -25,8 +34,13 @@ def render(bitcoin_hash):
     }
 
     if mimetype == 'video':
+        poster = edition['thumbnail']['url']
+
+        if edition['thumbnail'].get('thumbnail_sizes'):
+            poster = edition['thumbnail']['thumbnail_sizes'].get('600x600', poster)
+
         context.update({
-            'poster': edition['thumbnail'],
+            'poster': poster,
             'sources': [{'type': 'video/' + e['label'], 'src': e['url']}
                         for e in edition['digital_work']['encoding_urls']]
         })
@@ -43,9 +57,10 @@ def render(bitcoin_hash):
 @app.route('/edition/<bitcoin_hash>')
 @app.route('/content/<bitcoin_hash>')
 def embed(bitcoin_hash):
-    if not BITCOIN_HASH_RE.match(bitcoin_hash):
+    page = render(bitcoin_hash)
+    if not page:
         abort(404)
-    return render(bitcoin_hash)
+    return page
 
 
 if __name__ == '__main__':

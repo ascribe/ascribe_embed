@@ -82,6 +82,10 @@
     .vjs-default-skin .vjs-control-bar {
       background-color: rgba(0,0,0,.7);
     }
+
+    .no-fullscreen .vjs-fullscreen-control { display: none; }
+    .no-fullscreen .vjs-default-skin .vjs-volume-control { margin-right: 20px; }
+
 </style>
 {% endblock %}
 
@@ -89,7 +93,7 @@
 <div id="main-container" class="container">
   <div class="overlay t">
     <h1>
-      <a href="https://www.ascribe.io/art/piece/{{bitcoin_hash}}" target="_blank">
+      <a href="https://www.ascribe.io/app/{{endpoint}}/{{bitcoin_hash}}" target="_blank">
         {{title}} &ndash; {{artist}}
       </a>
     </h1>
@@ -102,6 +106,12 @@
 </div>
 
 <script>
+var fullscreenEnabled = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled;
+
+if (!fullscreenEnabled) {
+    document.querySelector('body').classList.add('no-fullscreen');
+}
+
 function updateContainer(options) {
   var c = document.getElementById(options.container);
   this.on('play', function(e) {
