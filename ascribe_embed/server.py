@@ -8,10 +8,10 @@ from flask import Flask, abort, render_template
 
 app = Flask(__name__)
 
-API_ENDPOINT = os.environ.get('API_ENDPOINT', 'https://www.ascribe.io/api/{}')
+API_ENDPOINT = os.environ.get('API_ENDPOINT', 'https://www.ascribe.io/api/') 
 
-EDITIONS_ENDPOINT = API_ENDPOINT.format('/editions/{}/')
-PIECES_ENDPOINT = API_ENDPOINT.format('/pieces/{}/')
+EDITIONS_ENDPOINT = API_ENDPOINT + 'editions/{}/'
+PIECES_ENDPOINT = API_ENDPOINT + '/pieces/{}/'
 BITCOIN_HASH_RE = re.compile('^[a-zA-Z0-9]+$')
 
 
@@ -19,7 +19,6 @@ BITCOIN_HASH_RE = re.compile('^[a-zA-Z0-9]+$')
 def render(bitcoin_hash):
     endpoint = 'editions'
     details = requests.get(EDITIONS_ENDPOINT.format(bitcoin_hash)).json()
-    print details
     if not details.get('success'):
         endpoint = 'pieces'
         details = requests.get(PIECES_ENDPOINT.format(bitcoin_hash)).json()
