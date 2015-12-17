@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block head %}
-<link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
-<script src="//vjs.zencdn.net/4.12/video.js"></script>
+<link href="//vjs.zencdn.net/5.4.4/video-js.min.css" rel="stylesheet">
+<script src="//vjs.zencdn.net/5.4.4/video.min.js"></script>
 {% endblock %}
 
 {% block style %}
 <style>
     body { font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif }
     video { width: 100% }
-    .video-js { padding-top: 56.25% }
+    .video-js { padding-top: 56.25%; width: 100% }
     .vjs-fullscreen { padding-top: 0px }
     .t { -webkit-transition: opacity .3s ease-in-out; -moz-transition: opacity .3s ease-in-out; -ms-transition: opacity .3s ease-in-out; -o-transition: opacity .3s ease-in-out; transition: opacity .3s ease-in-out }
     .container { position: relative }
@@ -75,10 +75,6 @@
       text-shadow: none;
     }
 
-    .vjs-default-skin .vjs-volume-bar {
-      height: .5em;
-    }
-
     .vjs-default-skin .vjs-control-bar {
       background-color: rgba(0,0,0,.7);
     }
@@ -98,7 +94,7 @@
       </a>
     </h1>
   </div>
-  <video id="main-video" class="video-js vjs-default-skin" poster="{{poster}}" controls preload="none" width="auto" height="auto">
+  <video id="main-video" class="video-js vjs-default-skin" poster="{{poster}}" controls preload="none" width="100%" height="56.25%">
   {% for source in sources %}
     <source type="{{source.type}}" src="{{source.src}}">
   {% endfor %}
@@ -121,6 +117,9 @@ function updateContainer(options) {
   this.on('pause', function(e) {
     console.log('playback paused!');
     c.classList.remove('video-playing');
+  });
+  this.on('error', function(e) {
+      Raven.captureMessage('videojs.onerror', e);
   });
 };
 videojs.plugin('updateContainer', updateContainer);
