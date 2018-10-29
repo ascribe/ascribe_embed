@@ -9,4 +9,8 @@ setup(
     author='Alberto Granzotto',
     author_email='alberto@ascribe.io',
     packages=['ascribe_embed'],
+    license='LGPLv3',
+    classifiers=[
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+    ],
 )
